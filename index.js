@@ -13,6 +13,7 @@ app.get('/getDueStatus/:id', async (req, res) => {
 
   try {
     const response = await axios.get(url);
+    console.log(`fetched student with reg-number : ${id} fees due data successfully`);
     res.json({
       data: response.data,
       status: 'success'
