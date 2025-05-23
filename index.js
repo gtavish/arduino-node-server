@@ -43,6 +43,8 @@ app.get('/getDueStatus/:id', async (req, res) => {
       status: 'success'
      });
   } catch (error) {
+    console.error(`error occurred`,error);
+    console.error(`error occurred`,error.message);
     res.status(500).json({
       message: 'Failed to fetch data',
       error: error.message
