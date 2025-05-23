@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const twilio = require('twilio');
@@ -6,8 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Twilio credentials
-const accountSid = 'AC09d1e3809df0c114e5336559b621bc8c';
-const authToken = 'c4c4bbd0434b4b7ab5731d6dcb442116';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 app.get('/welcome', (req, res) => {
@@ -26,7 +27,6 @@ app.get('/getDueStatus/:id', async (req, res) => {
     }else{
        console.error(`unable to fetch student fees data with reg-number : ${id}`);
     }
-    const whatsappNumber = `whatsapp:+917059252457`;
     let messageBody = "";
     if(student.hasDues){
       messageBody = `Hello! ${student.name} bearing Roll Number ${id} . You have Rs ${student.amount}/- pending. Please clear them soon!! - Admin`;
@@ -35,7 +35,7 @@ app.get('/getDueStatus/:id', async (req, res) => {
     }
     const msg = await client.messages.create({
       from: 'whatsapp:+14155238886',
-      to: whatsappNumber,
+      to: process.env.WHATSAPP_NUMBER,
       body: messageBody
     });
     res.json({ message: 'WhatsApp message for pending dues(if any) sent successfully',
